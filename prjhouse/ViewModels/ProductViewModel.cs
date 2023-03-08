@@ -1,4 +1,5 @@
 ﻿using prjhouse.Models;
+using System.ComponentModel;
 
 namespace prjhouse.ViewModels
 {
@@ -11,6 +12,7 @@ namespace prjhouse.ViewModels
             _product = new Product();
 
         }
+       
         public Product product
         {
             get{return _product;}
@@ -18,13 +20,12 @@ namespace prjhouse.ViewModels
 
 
         }
-
-         public int Fid
+         public int fid
         {
             get { return _product.Fid; }
             set { _product.Fid = value; }
         }
-
+        
         public string? HouseName 
         {   get { return _product.HouseName; }
             set {_product.HouseName=value; } 
@@ -47,8 +48,14 @@ namespace prjhouse.ViewModels
             set {_product.HousePrice=value; } 
         }
 
+        public string? Housephoto
+        {
+            get { return _product.Housephoto; }
+            set { _product.Housephoto = value;}
+        }
 
-
+        public IFormFile photo { get; set; }
+       
 
 
 

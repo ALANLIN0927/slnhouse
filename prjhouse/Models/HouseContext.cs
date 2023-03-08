@@ -131,13 +131,11 @@ namespace prjhouse.Models
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Fid);
 
                 entity.ToTable("Product");
 
-                entity.Property(e => e.Fid)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("fid");
+                entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.HouseAddressArea)
                     .HasMaxLength(50)
@@ -150,6 +148,8 @@ namespace prjhouse.Models
                 entity.Property(e => e.HouseName).HasMaxLength(50);
 
                 entity.Property(e => e.HousePrice).HasMaxLength(50);
+
+                entity.Property(e => e.Housephoto).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

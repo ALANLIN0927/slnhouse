@@ -3,8 +3,10 @@
 @{
     ViewData["Title"] = "productlist";
 }
-
-<h1>productlist</h1>
+@section style{
+    <link rel="stylesheet" href="~/css/productlist.css">
+}
+<h1>房子瀏覽</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,7 +15,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Fid)
+                序
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Housephoto)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.HouseName)
@@ -31,11 +36,18 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fid)
-            </td>
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                
+                <tr class="trclass">
+                    <td>
+                        @count
+                </td>
+                    <td>
+                        <img  class="showphoto"src='~/images/@item.Housephoto'/>
+                    </td>
             <td>
                 @Html.DisplayFor(modelItem => item.HouseName)
             </td>
@@ -53,7 +65,10 @@
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
-        </tr>
+            </tr>
+                count++;
+            }
+           
 }
     </tbody>
 </table>
