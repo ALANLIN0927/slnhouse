@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using prjhouse.Models;
 
 namespace prjhouse.Controllers
@@ -23,9 +24,29 @@ namespace prjhouse.Controllers
         public IActionResult productlist()
         {
             
-           
-            return View();
+            IEnumerable<Product> products = _house.Products;
+
+            var productslist = from c in products
+                               select c;
+
+               return View(productslist);
         }
+
+        public IActionResult create()
+        {
+            
+            return View();
+
+        }
+        [HttpPost]
+        public IActionResult create(Product product)
+        {
+            
+            
+
+        }
+
+
 
 
 
