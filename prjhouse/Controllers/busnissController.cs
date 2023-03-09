@@ -1,0 +1,137 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using prjhouse.Models;
+using prjhouse.ViewModels;
+
+namespace prjhouse.Controllers
+{
+    public class busnissController : Controller
+    {
+        private  IWebHostEnvironment _environment;
+        private readonly HouseContext _house;
+
+        public busnissController(IWebHostEnvironment environment, HouseContext house)
+        {
+            _environment = environment;
+            _house = house;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult create()
+        {
+
+            return View();
+
+        }
+        [HttpPost]
+        public IActionResult create(ProductViewModel vm, IFormFile photo)
+        {
+            if (vm.HouseName == null || vm.HouseAddressArea == null || vm.HouseAddressCity == null || vm.HousePrice == null)
+            {
+                return View();
+            }
+            else
+            {
+                if (photo != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + ".jpg";
+                    string filePath = Path.Combine(_environment.WebRootPath, "images", fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        photo.CopyTo(fileStream);
+                    }
+                    vm.Housephoto = fileName;
+                }
+
+                Product house = new Product();
+                house = vm.product;
+                _house.Products.Add(vm.product);
+                _house.SaveChanges();
+                return RedirectToAction("productlist","Customer");
+            }
+
+
+        }
+        public IActionResult checkformdata(Product vm)  //api
+        {
+            if (vm.HouseName == null)
+            {
+                return Json("房屋名稱不能空白");
+            }
+            if (vm.HouseAddressArea == null)
+            {
+                return Json("地區名稱不能空白");
+            }
+            if (vm.HouseAddressCity == null)
+            {
+                return Json("地區城市不能空白");
+            }
+            if (vm.HousePrice == null)
+            {
+                return Json("房屋售價不能空白");
+            }
+
+            return Json("已新增房屋");
+        }
+
+        public IActionResult edit(int id)
+        {
+            if (id != null)
+            {
+                Product house = _house.Products.FirstOrDefault(c => c.Fid == id);
+                if(house != null)
+                {
+                    return View(house);
+                }
+
+                return Redirect("productlist");
+            }
+
+
+            return Redirect("productlist");
+        }
+
+        [HttpPost]
+        public IActionResult edit(ProductViewModel h)
+        {
+            if (h.HouseName == null || h.HouseAddressCity==null||h.HouseAddressArea==null||h.HousePrice==null) 
+            {
+                return View(h);
+            }
+            Product house = _house.Products.FirstOrDefault(c=>c.Fid == h.fid);
+            if(house != null)
+            {
+                if (h.photo != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + ".jpg";
+                    string filePath = Path.Combine(_environment.WebRootPath, "images", fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                       h.photo.CopyTo(fileStream);
+                    }
+                    house.Housephoto = fileName;
+                }
+                else
+                {
+                    house.Housephoto = house.Housephoto;
+                }
+                house.HouseName = h.HouseName;
+                house.HouseAddressCity = h.HouseAddressCity;
+                house.HouseAddressArea = h.HouseAddressArea;
+                house.HousePrice = h.HousePrice;
+                _house.SaveChanges();
+                return RedirectToAction("productlist","Customer");
+            }
+
+            return Redirect("productlist");
+        }
+
+
+
+
+    }
+
+}

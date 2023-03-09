@@ -20,7 +20,6 @@ namespace prjhouse.Controllers
             _environment = environment;
         }
 
-
          public IActionResult productlist()
         {
             
@@ -31,51 +30,7 @@ namespace prjhouse.Controllers
 
                return View(productslist);
         }
-
-        public IActionResult create()
-        {
-            
-            return View();
-
-        }
-        [HttpPost]
-        public IActionResult create(ProductViewModel vm, IFormFile photo)
-        {
-            if (vm == null)
-            {
-                return View();
-            }
-            else
-            {
-                if (photo != null)
-                {
-                    string fileName = Guid.NewGuid().ToString() + ".jpg";
-                    string filePath = Path.Combine(_environment.WebRootPath, "images", fileName);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        photo.CopyTo(fileStream);
-                    }
-                    vm.Housephoto = fileName;
-                }
-
-                //Product house = new Product();
-                //house = vm.product;
-              
-                _house.Products.Add(vm.product);
-                _house.SaveChanges();
-                return Redirect("productlist");
-            }
-
-
-        }
-
-
-
-
-
-
-
-
+       
 
         public IActionResult Index()
         {

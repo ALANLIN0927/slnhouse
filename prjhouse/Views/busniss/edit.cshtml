@@ -1,0 +1,76 @@
+﻿ @model prjhouse.Models.Product
+
+@{
+    ViewData["Title"] = "edit";
+}
+
+<h1>edit</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="edit" enctype="multipart/form-data" name="editform">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="aui-info">
+                
+                <img src="@Url.Content("~/images/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
+                <span class="sapnphoto">上傳房屋照</span>
+            </div>
+            @*<input type="hidden" value="@Model.MemberPhotoFile" name="MemberPhotoFile" />*@
+            <input type="hidden" name="Fid" value="@Model.Fid"/>
+            <div class="divhint">
+                <div class="div1">
+                    @* <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName"  />*@
+                    <input id="HouseNameid" type="text" class="input" value="@Model.HouseName" name="HouseName" />
+                </div>
+                <span id="namecorrect" class="spanerrormessage"></span>
+            </div>
+            <span class="text3">
+                <p class="text4">房屋地址</p>
+            </span>
+            <div class="display">
+                <div class="div2">
+                    <select type="text " id="city" class="input"value="@Model.HouseAddressCity"name="HouseAddressCity">
+                        <option>@Model.HouseAddressCity</option>
+                    </select>
+                </div>
+                <div class="div2">
+                    <select type="text " id="area" class="input" value="@Model.HouseAddressArea"name="HouseAddressArea">
+                        <option>@Model.HouseAddressArea</option>
+                    </select>
+                    <span id="houseadressarea" class="spanerrormessage"></span>
+                </div>
+            </div>
+            <div class="dashed"></div>
+
+            <div class="form-group">
+                <input type="submit" value="確定" class="btn btn-primary" id="submitid" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+    
+}
