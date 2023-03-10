@@ -1,5 +1,4 @@
-﻿@using System.Text.Json;
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,21 +7,19 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/prjhouse.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/customerlayout.css" />
     <style>
-        .divregin{
-            margin-right:100px;
-           justify-content:space-around;
-            justify-items:center;
-            width:200px;
-        }
+        
     </style>
     @await RenderSectionAsync("style", required: false)
 </head>
 <body>
+
     <header>
+
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">三重房屋</a>
+                <a class="navbar-brand aheadclass" style="color:red;" asp-area="" asp-controller="Home" asp-action="Index">三重房屋</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -30,38 +27,24 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="productlist">房屋一覽</a>
+                     <a class="nav-link  amidclass" style="color:green;" asp-area="" asp-controller="busniss" asp-action="productlist">房屋清單</a>
                         </li>
-                        <li class="nav-item">
+                       @* <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">購物車</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">訂單</a>
-                        </li>
+                        </li>*@
                     </ul>
                 </div>
             </div>
+            
             <ul class="divregin navbar-nav flex-grow-1">
-                @{
-                    if (Context.Session.Keys.Contains(CDictionary.SK_LOGIN_USER))
-                    {
-                        string json = Context.Session.GetString(CDictionary.SK_LOGIN_USER);
-                        NormalMember member = JsonSerializer.Deserialize<NormalMember>(json);
-
-                        <li class="nav-item"><span>@member.MemberName</span><a asp-controller="Customer" asp-action="loginout">登出</a></li>
-                    }      
-                     else{
-                         <li class="nav-item"><a asp-controller="Customer" asp-action="login">登入</a></li>
-                    }
-
-
-                }
-               
-                
+                <li class="nav-item">登入</li>
                 <li class="nav-item">會員中心</li>
             </ul>
         </nav>
-       
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -69,11 +52,11 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    @*<footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - 三重房屋 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

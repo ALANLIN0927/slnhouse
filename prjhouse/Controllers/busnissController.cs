@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using prjhouse.Models;
 using prjhouse.ViewModels;
+using System.Text.RegularExpressions;
 
 namespace prjhouse.Controllers
 {
@@ -20,6 +21,20 @@ namespace prjhouse.Controllers
         {
             return View();
         }
+
+
+        public IActionResult productlist()
+        {
+
+            IEnumerable<Product> products = _house.Products;
+
+            var productslist = from c in products
+                               select c;
+
+            return View(productslist);
+        }
+
+
         public IActionResult create()
         {
 
@@ -50,7 +65,7 @@ namespace prjhouse.Controllers
                 house = vm.product;
                 _house.Products.Add(vm.product);
                 _house.SaveChanges();
-                return RedirectToAction("productlist","Customer");
+                return RedirectToAction("productlist");
             }
 
 
@@ -77,7 +92,7 @@ namespace prjhouse.Controllers
             return Json("已新增房屋");
         }
 
-        public IActionResult edit(int id)
+        public IActionResult edit(int? id)
         {
             if (id != null)
             {
@@ -95,22 +110,22 @@ namespace prjhouse.Controllers
         }
 
         [HttpPost]
-        public IActionResult edit(ProductViewModel h)
+        public IActionResult edit(Product h,ProductViewModel vm)
         {
             if (h.HouseName == null || h.HouseAddressCity==null||h.HouseAddressArea==null||h.HousePrice==null) 
             {
                 return View(h);
             }
-            Product house = _house.Products.FirstOrDefault(c=>c.Fid == h.fid);
+            Product house = _house.Products.FirstOrDefault(c=>c.Fid == h.Fid);
             if(house != null)
             {
-                if (h.photo != null)
+                if (vm.photo != null)
                 {
                     string fileName = Guid.NewGuid().ToString() + ".jpg";
                     string filePath = Path.Combine(_environment.WebRootPath, "images", fileName);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                       h.photo.CopyTo(fileStream);
+                       vm.photo.CopyTo(fileStream);
                     }
                     house.Housephoto = fileName;
                 }
@@ -123,10 +138,54 @@ namespace prjhouse.Controllers
                 house.HouseAddressArea = h.HouseAddressArea;
                 house.HousePrice = h.HousePrice;
                 _house.SaveChanges();
-                return RedirectToAction("productlist","Customer");
+                return RedirectToAction("productlist");
             }
+            return RedirectToAction("productlist");
 
-            return Redirect("productlist");
+        }
+        
+            public IActionResult Editverify(Product vm)
+            {
+            if (vm.HouseName == null)
+            {
+                return Json("房屋名稱不能空白");
+            };
+            if (vm.HouseAddressCity == null)
+            {
+                return Json("城市不能空白");
+            }
+            if (vm.HouseAddressArea == null)
+            {
+                return Json("區域不能空白");
+            }
+            if (vm.HousePrice == null)
+            {
+                return Json("價錢不能空白");
+            }
+            else
+            {
+                return Json("修改完成");
+            };
+           
+
+
+
+        }
+
+        public IActionResult delete(int? id)
+        {
+            if (id != null)
+            {
+                Product product= _house.Products.FirstOrDefault(c=>c.Fid==id);
+                if(product!=null)
+                {
+                 _house.Products.Remove(product);
+                    _house.SaveChanges();
+                   
+                }
+                return RedirectToAction("productlist");
+            }
+            return RedirectToAction("productlist");
         }
 
 

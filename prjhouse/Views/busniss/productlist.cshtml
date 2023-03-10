@@ -6,10 +6,10 @@
 @section style{
     <link rel="stylesheet" href="~/css/productlist.css">
 }
-<h1>房子瀏覽</h1>
+<h1>房屋一覽表</h1>
 
 <p>
-    <a asp-controller="@Url.Content("~/busniss")"  asp-action="create">新增房屋</a>
+    <a asp-controller="busniss" asp-action="create">新增房屋</a>
 </p>
 <table class="table">
     <thead>
@@ -40,35 +40,34 @@
             int count = 0;
             foreach (var item in Model)
             {
-                
                 <tr class="trclass">
                     <td>
                         @count
-                </td>
-                    <td>
-                        <img  class="showphoto"src='~/images/@item.Housephoto'/>
                     </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HouseName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HouseAddressArea)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HouseAddressCity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HousePrice)
-            </td>
-            <td>
-                @Html.ActionLink("Edit","edit","busniss", new {  id=item.Fid }) |         
-                @Html.ActionLink("Details", "addcaritem", new {id=item.Fid }) |
-                @Html.ActionLink("Delete", "Delete", new {  id=item.Fid })
-            </td>
-            </tr>
+                    <td>
+                        <img class="showphoto" src='~/images/@item.Housephoto' />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HouseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HouseAddressArea)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HouseAddressCity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HousePrice)
+                    </td>
+                    <td>
+                        @Html.ActionLink("編輯","edit", new {  id=item.Fid }) |
+                        @Html.ActionLink("Details","addcaritem", new {id=item.Fid }) |
+                        @Html.ActionLink("刪除","delete", new { id=item.Fid })
+                    </td>
+                </tr>
                 count++;
             }
-           
-}
+
+        }
     </tbody>
 </table>

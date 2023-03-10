@@ -5,9 +5,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();             //µù¥Usession
+builder.Services.AddSession(op =>                         //µù¥Usession
+{
+    op.IOTimeout = TimeSpan.FromMinutes(20);
+    op.Cookie.HttpOnly = true;
+    op.Cookie.IsEssential = true;
+});
 
-
-builder.Services.AddDbContext<HouseContext>(
+builder.Services.AddDbContext<HouseContext>(               
  options => options.UseSqlServer(
  builder.Configuration.GetConnectionString("HouseConnection")
 ));
@@ -24,7 +30,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();                                              //±Ò¥Îsession
 app.UseRouting();
 
 app.UseAuthorization();

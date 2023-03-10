@@ -3,24 +3,40 @@
 @{
     ViewData["Title"] = "edit";
 }
+@section style{
+    <link rel="stylesheet" href="~/css/create.css">
+}
 
-<h1>edit</h1>
+<h1>修改房屋資料</h1>
 
-<h4>Product</h4>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="edit" enctype="multipart/form-data" name="editform">
+        <form asp-action="edit" enctype="multipart/form-data" name="editform" id="editfromid">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="aui-info">
-                
-                <img src="@Url.Content("~/images/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                @{
+                    if (Model.Housephoto != null)
+                    {
+                        <img src="~/images/@Model.Housephoto" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("~/images/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                    }
+                }
+                 
+                      
                 <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
                 <span class="sapnphoto">上傳房屋照</span>
             </div>
             @*<input type="hidden" value="@Model.MemberPhotoFile" name="MemberPhotoFile" />*@
             <input type="hidden" name="Fid" value="@Model.Fid"/>
             <div class="divhint">
+                <span class="text3">
+                    <p class="text4">房屋名稱:</p>
+                </span>
                 <div class="div1">
                     @* <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName"  />*@
                     <input id="HouseNameid" type="text" class="input" value="@Model.HouseName" name="HouseName" />
@@ -28,7 +44,7 @@
                 <span id="namecorrect" class="spanerrormessage"></span>
             </div>
             <span class="text3">
-                <p class="text4">房屋地址</p>
+                <p class="text4">房屋地址:</p>
             </span>
             <div class="display">
                 <div class="div2">
@@ -42,6 +58,16 @@
                     </select>
                     <span id="houseadressarea" class="spanerrormessage"></span>
                 </div>
+            </div>
+            <div class="divhint">
+                <span class="text3">
+                    <p class="text4">房屋價錢:</p>
+                </span>
+                <div class="div1">
+                    @* <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName"  />*@
+                    <input id="Housepriceid" type="text" class="input" value="" name="HousePrice" />
+                </div>
+                <span id="housepricecorrect" class="spanerrormessage"></span>
             </div>
             <div class="dashed"></div>
 
@@ -58,19 +84,120 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
+    <script src="~/js/taiwan_districts.js"></script>
+        <script type="text/javascript">
+
+             function changcity(){
+                 for (let item of data) { $("#city").append(`<option>${item.name}</option>`); }
+
+                  $("#city").change(function ()
+            {
+                $("#area").find("option").remove();
+                let city = $(this).val();
+                for (let item of data)
+                {
+                    if (city == item.name)
+                    {
+                        for (let district of item.districts)
+                            $("#area").append(`<option>${district.name}</option>`);
+                        break;
+                    }
+                }
+            });
+            };
+             changcity();    
+
+            var upload= function (c,d){
+                "use strict";
+                var $c= document.querySelector(c),
+                    $d=document.querySelector(d),
+                    file =$c.files[0],
+                        reader =new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload=function (e){
+
+                            $d.setAttribute("src", e.target.result);
+                        };
+            };
+            var submitbtn = document.getElementById("submitid");   //按鈕
+
+            document.getElementById("HouseNameid").addEventListener("blur", checkPwd);   //名子
+
+           function checkPwd() {
+               var nameobj = document.getElementById("HouseNameid");
+               var spnameobj = document.getElementById("namecorrect");
+                var nameval = nameobj.value;
+             if (nameval == "") {
+                 spnameobj.innerHTML = "<img src='@Url.Content("~/images/error.png")'/>此欄位必填";
+                 submitbtn.setAttribute('disabled', 'disabled');
+                 return;
+               }
+             else {
+
+                spnameobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+                return;
+            }
+
+        };
 
 
 
+        document.getElementById("Email").addEventListener("change", checkEmail);                              //email
+        function checkEmail() {
+            var emailobj = document.getElementById("Email");
+            var spnemailobj = document.getElementById("emailcorrect");
+            var emailval = emailobj.value;
+
+            if (emailval == "") {
+                spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+                return;
+            }
+            else {
+                spnemailobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+        };
+
+        document.getElementById("submitid").addEventListener("click", async () => {
+            event.preventDefault();
+
+            let formData = new FormData(document.editform)
+            const request = await fetch(`@Url.Content("~/busniss/Editverify")`, {
+                body: formData,
+                method: "Post",
+
+            })
+            const data = await request.json();
+            if (data == "已修改完成") {
+                alert("已修改完成");
+
+                document.getElementById("editfromid").submit();
+            }
+            else if (data == "房屋名稱不能空白") {
+                document.getElementById("namecorrect").innerHTML = "<img src='@Url.Content("~/images/error.png")'/>此欄位必填";
+            }
+            else if (data == "城市不能空白") {
+                document.getElementById("houseadresscity").innerHTML = "<img src='@Url.Content("~/images/error.png")'/>此欄位必填";
+            }
+            else if (data == "區域不能空白") {
+                document.getElementById("houseadressarea").innerHTML = "<img src='@Url.Content("~/images/error.png")'/>此欄位必填";
+            }
+            else if (data == "價錢不能空白") {
+                document.getElementById("housepricecorrect").innerHTML = "<img src='@Url.Content("~/images/error.png")'/>此欄位必填";
+            }
+
+            else {
+                document.getElementById("phonecorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>店名重複";
+
+                return;
 
 
+            }
+        });
 
 
+   </script>
 
-
-
-
-
-    </script>
-    
 }

@@ -6,12 +6,11 @@
 @section style{
     <link rel="stylesheet" href="~/css/create.css">
 }
+<div class="wrap">
 
-<h2>新增房屋</h2>
 
-
-<hr />
 <div class="row">
+        <h2>新增房屋</h2>
     <div class="col-md-4">
         <form asp-action="create" enctype="multipart/form-data" name="createform" id="createformid">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -23,7 +22,7 @@
             @*<input type="hidden" value="@Model.MemberPhotoFile" name="MemberPhotoFile" />*@
             <div class="divhint">
                 <span class="text3">
-                    <p class="text4">姓名</p>
+                    <p class="text4">房屋名稱:</p>
                 </span>
                 <div class="div1">
                     @* <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName"  />*@
@@ -32,7 +31,7 @@
                 <span id="namecorrect" class="spanerrormessage"></span>
             </div>
             <span class="text3">
-                <p class="text4">房屋地址</p>
+                <p class="text4">房屋地址:</p>
             </span>
             <div class="display">
                 <div class="div2">
@@ -49,7 +48,7 @@
             </div>
            <div class="divhint">
                 <span class="text3">
-                    <p class="text4">房屋價錢</p>
+                    <p class="text4">房屋價錢:</p>
                 </span>
                 <div class="div1">
                     @* <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName"  />*@
@@ -67,7 +66,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">回首頁</a>
+</div>
 </div>
 
 @section Scripts {

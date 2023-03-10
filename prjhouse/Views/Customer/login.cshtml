@@ -1,0 +1,253 @@
+﻿@model prjhouse.Models.NormalMember
+
+@{
+    ViewData["Title"] = "Login";
+    //Layout = null;
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@section style{
+    <link rel="stylesheet" href="~/css/memberlogin.css">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    <style>
+      
+    </style>
+    }
+        <form asp-action="Login" id="Login" name="Loginname">
+        <div class="wrap" id="wrap">
+            <div class="Content">
+
+                <div class="Head">
+                    <p class="toptitle">歡迎使用三重房屋</p>
+                    <p class="toptitle2">請選擇登入/註冊方式，通過驗證後即可使用</p>
+                    <div>
+                        <input type="button" onclick=location.href="@Url.Content("@*~/CustomerMember/Register*@")" class="btnregister divbutton" value="註冊" />
+                    </div>
+                        <span id="spanresponse" class="spanresponseclass"></span>
+                </div>
+
+                <div class="textinput">
+
+                    <div class="text">
+
+                        <img src="@Url.Content("~/images/call.png")" class="img"></img>
+                        <input  id="phoneid" type="text" placeholder="手機號碼" class="text2" name="txtAccount" value=""autofocus />
+                    </div>
+                    <p class="detail">只支援台灣手機號碼</p>
+                    <div class="text">
+
+                        <img src="@Url.Content("~/images/key.png")" class="img"></img>
+                        <input id="Password" type="password" placeholder="密碼" class="text2" name="txtPassword" />
+                        <i style="margin-left:-26px;margin-top:7px;" class="far fa-eye" id="togglePassword"></i>
+                        <span id="passwordcorrect" class="spanerrormessage"></span>
+
+
+                    </div>
+
+                    <p class="detail2">英文大小寫含數字共6位</p>
+                </div>
+
+                <input id="submitid" type="submit" value="登入" class="login" />
+                <div class="googleline">
+                <div class="googleclass">
+                    <div style="margin-bottom:20px;">
+                        <div id="g_id_onload"
+                         data-client_id="274917650943-tcctf041b357aeff8q2um096rutfsrt9.apps.googleusercontent.com"
+
+                             data-login_uri="@Url.Content("~/CustomerMember/ValidGoogleLogin")"
+                             data-auto_prompt="false">
+                        </div>
+                        <div class="g_id_signin"
+                         data-type="icon"
+                         data-size="large"
+                         data-theme="filled_blue"
+                         data-text="sign_in_with"
+                         data-shape="rectangular"
+                         data-logo_alignment="center">
+                        </div>
+                    </div>
+                </div>
+                            @*<div id="buttonDiv"></div>*@
+                <div class="lineclass">
+                    <a href="@Url.Action("LineLoginDirect")">
+                        <img class="imgline" src="@Url.Content("~/images/btn_base.png")" alt="Line Login" />
+                    </a>
+                 </div>
+                    </div>
+                <div class="display">
+
+                    <img src="@Url.Content("~/images/question.png")" class="img2"></img>
+
+                    <p class="text3"><a href=@Url.Action("Forgetpassword","CustomerMember") class="forgotspan" id="forgotPwd">忘記密碼</a></p>
+                </div>
+                    <div class="demobtnlogin">
+                        <input type="button" class="democorrect" id="democorrectid" value="" />
+                        <input type="button" class="demoerror" id="demoerrorid" value="" />
+                        <input type="button" class="overclass" id="overid" value="" />
+                        <input type="button" class="tingclass" id="tingid" value="" />
+                    </div>
+                <div class="dashed"></div>
+                <div>
+                    <span class="text3">登入即代表您同意</span>
+                    <span class="text4">使用者條款</span>
+                    <span class="text3">和</span>
+                    <span class="text4">隱私權條款</span>
+                </div>
+            </div>
+
+        </div>
+
+        </form>
+
+        @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+       
+
+            const passwordicon = document.querySelector("#togglePassword");               
+            const password = document.querySelector("#Password");
+
+        var submitbtn = document.getElementById("submitid");
+
+        
+
+        passwordicon.addEventListener("click", () => {                                //密碼圖示轉換
+
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            passwordicon.classList.toggle('fa-eye-slash');
+        });
+
+
+            submitbtn.addEventListener("click",()=>{
+              
+              
+
+            var passwordobj = document.getElementById("Password");
+            var spnpasswordobj = document.getElementById("passwordcorrect");
+            var passwordval = passwordobj.value;
+
+            if (passwordval == "" || passwordval.length < 6) {
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                return;
+             }
+             else{
+                if (passwordval.length >= 6) {
+
+                    re = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/);
+
+                    if (re.test(passwordval)) {
+                      
+                        spnpasswordobj.innerHTML = "";
+                        
+                       
+                    }
+                    else {
+                        spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                       
+                        return;
+                    }
+
+
+                }
+                }
+           
+           });
+
+
+        document.getElementById("submitid").addEventListener('click',async()=>{
+            
+            event.preventDefault();
+
+            let formdata = new FormData(document.Loginname);
+
+            const request = await fetch(`@Url.Content("~/Customer/loginmailverify")`, {
+
+                body: formdata,
+                method: "Post",
+
+            })
+            const data = await request.json();
+            console.log(data);
+            if (data == "帳號或密碼有錯") {
+                document.getElementById("spanresponse").innerHTML = data;
+                return;
+            }
+            else if (data == "尚未開通會員資格") {
+                document.getElementById("spanresponse").innerHTML = data;
+                return;
+            }
+            else if (data == "此帳號被停權") {
+                document.getElementById("spanresponse").innerHTML = data;
+                return;
+            }
+            else {
+                document.getElementById("spanresponse").innerHTML = "";
+                document.getElementById("Login").submit();
+            }
+              
+        });
+           
+
+        document.getElementById("democorrectid").addEventListener('click', () => {                             //正確DEMO鍵
+            document.getElementById("phoneid").value = "0936212576"
+            document.getElementById("Password").value = "aA1234"
+           
+           
+        });
+
+        document.getElementById("demoerrorid").addEventListener('click', () => {                                 //錯誤
+
+            document.getElementById("phoneid").value = "0987654321";
+            document.getElementById("Password").value = "Aa2222";
+            
+
+        });
+        document.getElementById("overid").addEventListener('click',()=>{
+
+            document.getElementById("phoneid").value = "0912345678";
+            document.getElementById("Password").value = "Aa1111";
+
+        });
+
+        document.getElementById("tingid").addEventListener('click', () => {
+
+            document.getElementById("phoneid").value = "0911223344";
+            document.getElementById("Password").value = "Aa4444";
+
+        });
+
+        $('#spanresponse').text('');
+        let isSus = getUrlParameter('isSus');
+        if(isSus){
+            $('#spanresponse').text('帳號未開通');
+        }
+
+        //抓 url get 參數
+        function getUrlParameter(sParam) {
+            var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                }
+            }
+            return false;
+        }
+
+    </script>
+}
