@@ -1,8 +1,16 @@
 ﻿.showphoto{
+    width:60px;
+    height:60px;
+}
+
+th {
+    font-size: 14px;
+    font-weight: bold;
     width:100px;
 }
-.trclass{
-    justify-content: center;
-    justify-items: center;
-    
+td {
+    font-size: 14px;
+    font-weight: bold;
+    width: 100px;
 }
+

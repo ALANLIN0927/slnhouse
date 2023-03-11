@@ -6,24 +6,27 @@
 @section style{
     <link rel="stylesheet" href="~/css/create.css">
 }
-<div class="wrap">
 
-
-<div class="row">
-       
-    <div class="col-md-4">
-        <form asp-action="create" enctype="multipart/form-data" name="createform" id="createformid">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+<form asp-action="create" enctype="multipart/form-data" name="createform" id="createformid">
+    <div class="wrap">
+        <div class="card3">
+            <div class="card30">
+                <h2 class="title2"><img src="@Url.Content("~/images/person.png")" />新增房屋</h2>
+                <div class="dashed"></div>
+                <div class="divheadpic">
             <div class="aui-info">
                 <img src="@Url.Content("~/images/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
                 <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
                 <span class="sapnphoto">上傳房屋照</span>
             </div>
+                </div>
             @*<input type="hidden" value="@Model.MemberPhotoFile" name="MemberPhotoFile" />*@
-            <div class="divhint">
                 <span class="text3">
                     <p class="text4">房屋名稱:</p>
                 </span>
+            <div class="divhint">
+                
                 <div class="div1">
                     @* <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName"  />*@
                     <input id="HouseNameid" type="text" class="input" value="" name="HouseName" />
@@ -56,19 +59,19 @@
                 </div>
                 <span id="namecorrect" class="spanerrormessage"></span>
             </div>
-            <div class="dashed"></div>
+                <div class="dashed"></div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" id="submitid" />
+                <div class="display">
+                    <input id="submitid" type="submit" class="enter" value="註冊" />
+                </div>
             </div>
-        </form>
+         </div>
     </div>
-</div>
+        </form>
 
-<div>
-    <a asp-action="Index">回首頁</a>
-</div>
-</div>
+
+
+
 
 @section Scripts {
     @{
@@ -164,14 +167,6 @@
 
             }
         });
-
-
-
-
-
-
-
-
 
     </script>
 }

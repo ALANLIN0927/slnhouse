@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using prjhouse.Models;
 using prjhouse.ViewModels;
+using System.Text.Json;
+
 
 namespace prjhouse.Controllers
 {
 
-
-
-    
     public class CustomerController : Controller
     {
         private readonly HouseContext _house;
@@ -68,7 +68,78 @@ namespace prjhouse.Controllers
             return Redirect("/Home/Index");
         }
 
+        public IActionResult productlist(CKeywordViewModel vm)
+        {
+            IEnumerable<Product> productlist = null;
+            if (vm.txtKeyword == null)
+            {
+                productlist = from c in _house.Products select c;
+            }
+            else
+            {
+                string keyword = vm.txtKeyword;
+                productlist = _house.Products.Where(c => c.HouseName.Contains(keyword)).ToList();
+            }
+            return View(productlist);         
 
+        }
+        public IActionResult addtocarapi()
+        {
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_USER))
+            {
+          
+                return Json("可以加入購物車");
+            }
+            return Json("請先登入會員");
+
+
+        }
+
+        public IActionResult addshopcar(int? id)
+        {
+            Product house= _house.Products.FirstOrDefault(c=>c.Fid==id);
+            if (house==null)
+            {
+                return RedirectToAction("productlist");
+            }
+            List<Product> cart = null;
+            string json = "";
+            if(HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST)) 
+            {
+                json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
+                cart = JsonSerializer.Deserialize<List<Product>>(json);          
+            }
+            else
+            {
+                cart = new List<Product>();
+            }
+             cart.Add(house);
+             json=JsonSerializer.Serialize(cart);
+             HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST,json);
+           return RedirectToAction("productlist");
+        }
+        public IActionResult cartview()
+        {
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_USER)){
+
+                List<Product> cart = null;
+                string json = "";
+                if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
+                {
+                    json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
+                    cart = JsonSerializer.Deserialize<List<Product>>(json);
+                    return View(cart);
+                }
+                else
+                {
+                    return RedirectToAction("productlist");
+                }
+            }
+
+            return RedirectToAction("productlist");
+        }
 
 
     }

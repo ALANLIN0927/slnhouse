@@ -1,0 +1,81 @@
+﻿@model IEnumerable<prjhouse.Models.Product>
+
+@{
+    ViewData["Title"] = "productlist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section style{
+        
+    <link rel="stylesheet" href="~/css/customerproductlist.css">
+
+}
+<div class="wrap">
+<h1>房屋一覽表</h1>
+<div>
+    @using (Html.BeginForm())
+    {
+        @:關鍵字 @Html.TextBox("txtKeyword")
+        <input type="submit" value="查詢">
+    }
+
+</div>
+
+ <div class="divhousecotain">
+        @{
+            int count = 0;
+            foreach (var item in Model) {
+                count++;
+                <div class="housesingle">
+                <div>
+             @item.HouseName
+            </div>
+             <div>
+         <img class="imghousephoto"src='~/images/@item.Housephoto'/>      
+            </div>
+        <div>
+         @item.HouseAddressCity
+        </div>
+    <div>
+        @item.HouseAddressArea
+    </div>
+    <div>
+        @item.HousePrice
+    </div>
+        <div>
+            @Html.ActionLink("加入購物車","addshopcar","Customer",new{ id=item.Fid },new{@class="btna"})
+        </div>
+                    
+        </div>
+                    
+            }
+           
+     }
+    </div>
+</div>
+ @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  document.querySelector('.btna').addEventListener('click',async()=>{
+      event.preventDefault();
+            const request = await fetch(`@Url.Content("~/Customer/addtocarapi")`);
+            const response =await request.json();
+            console.log(response);
+            if (response == "請先登入會員"){
+                alert("請先登入會員");
+            }
+            if (response == "可以加入購物車"){
+                alert("可以加入購物車");
+               
+            }
+
+        });
+
+
+
+
+
+</script>
+ }

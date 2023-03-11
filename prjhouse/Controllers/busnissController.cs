@@ -23,17 +23,22 @@ namespace prjhouse.Controllers
         }
 
 
-        public IActionResult productlist()
+        public IActionResult productlist(CKeywordViewModel vm)
         {
+            IEnumerable<Product> products = null;
+            string keyword =vm.txtKeyword;
+            if (keyword == null)
+            {
+                products = from c in _house.Products 
+                           select c;             
+            }
+            else
+            {
+               products = _house.Products.Where(c=>c.HouseName.Contains(keyword)).ToList();
 
-            IEnumerable<Product> products = _house.Products;
-
-            var productslist = from c in products
-                               select c;
-
-            return View(productslist);
+            }
+            return View(products);
         }
-
 
         public IActionResult create()
         {
