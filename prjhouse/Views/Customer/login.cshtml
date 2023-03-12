@@ -24,9 +24,9 @@
 
                 <div class="Head">
                     <p class="toptitle">歡迎使用三重房屋</p>
-                    <p class="toptitle2">請選擇登入/註冊方式，通過驗證後即可使用</p>
+                    <p class="toptitle2">藍色紐客戶demo鍵，紅色紐公司demo鍵</p>
                     <div>
-                        <input type="button" onclick=location.href="@Url.Content("@*~/CustomerMember/Register*@")" class="btnregister divbutton" value="註冊" />
+                        
                     </div>
                         <span id="spanresponse" class="spanresponseclass"></span>
                 </div>
@@ -53,7 +53,7 @@
                 </div>
 
                 <input id="submitid" type="submit" value="登入" class="login" />
-                <div class="googleline">
+              @*  <div class="googleline">
                 <div class="googleclass">
                     <div style="margin-bottom:20px;">
                         <div id="g_id_onload"
@@ -71,33 +71,33 @@
                          data-logo_alignment="center">
                         </div>
                     </div>
-                </div>
+                </div>*@
                             @*<div id="buttonDiv"></div>*@
-                <div class="lineclass">
+                @*<div class="lineclass">
                     <a href="@Url.Action("LineLoginDirect")">
                         <img class="imgline" src="@Url.Content("~/images/btn_base.png")" alt="Line Login" />
                     </a>
-                 </div>
-                    </div>
+                 </div>*@
+               @*     </div>
                 <div class="display">
 
                     <img src="@Url.Content("~/images/question.png")" class="img2"></img>
 
                     <p class="text3"><a href=@Url.Action("Forgetpassword","CustomerMember") class="forgotspan" id="forgotPwd">忘記密碼</a></p>
-                </div>
+            @*    </div>*@
                     <div class="demobtnlogin">
-                        <input type="button" class="democorrect" id="democorrectid" value="" />
-                        <input type="button" class="demoerror" id="demoerrorid" value="" />
-                        <input type="button" class="overclass" id="overid" value="" />
-                        <input type="button" class="tingclass" id="tingid" value="" />
+                        <input type="button" class="democorrect" id="democorrectid" value="客戶" />
+                        <input type="button" class="demoerror" id="demoerrorid" value="公司" />
+                        @*<input type="button" class="overclass" id="overid" value="" />
+                        <input type="button" class="tingclass" id="tingid" value="" />*@
                     </div>
-                <div class="dashed"></div>
+                @*<div class="dashed"></div>
                 <div>
                     <span class="text3">登入即代表您同意</span>
                     <span class="text4">使用者條款</span>
                     <span class="text3">和</span>
                     <span class="text4">隱私權條款</span>
-                </div>
+                </div>*@
             </div>
 
         </div>
@@ -137,7 +137,7 @@
             var passwordval = passwordobj.value;
 
             if (passwordval == "" || passwordval.length < 6) {
-                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/error.png")'/>格式錯誤";
                 return;
              }
              else{
@@ -152,7 +152,7 @@
                        
                     }
                     else {
-                        spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                        spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/error.png")'/>格式錯誤";
                        
                         return;
                     }
@@ -207,30 +207,30 @@
 
         document.getElementById("demoerrorid").addEventListener('click', () => {                                 //錯誤
 
-            document.getElementById("phoneid").value = "0987654321";
-            document.getElementById("Password").value = "Aa2222";
+            document.getElementById("phoneid").value = "0920178278";
+            document.getElementById("Password").value = "aA1234";
             
 
         });
-        document.getElementById("overid").addEventListener('click',()=>{
+        //document.getElementById("overid").addEventListener('click',()=>{
 
-            document.getElementById("phoneid").value = "0912345678";
-            document.getElementById("Password").value = "Aa1111";
+        //    document.getElementById("phoneid").value = "0912345678";
+        //    document.getElementById("Password").value = "Aa1111";
 
-        });
+        //});
 
-        document.getElementById("tingid").addEventListener('click', () => {
+        //document.getElementById("tingid").addEventListener('click', () => {
 
-            document.getElementById("phoneid").value = "0911223344";
-            document.getElementById("Password").value = "Aa4444";
+        //    document.getElementById("phoneid").value = "0911223344";
+        //    document.getElementById("Password").value = "Aa4444";
 
-        });
+        //});
 
-        $('#spanresponse').text('');
-        let isSus = getUrlParameter('isSus');
-        if(isSus){
-            $('#spanresponse').text('帳號未開通');
-        }
+        //$('#spanresponse').text('');
+        //let isSus = getUrlParameter('isSus');
+        //if(isSus){
+        //    $('#spanresponse').text('帳號未開通');
+        //}
 
         //抓 url get 參數
         function getUrlParameter(sParam) {

@@ -18,5 +18,7 @@ namespace prjhouse.Models
         public string? Emailtified { get; set; }
         public string? GoogleEmail { get; set; }
         public string? LineUserid { get; set; }
+        public string Type { get; set; } = null!;
+        public decimal? Membermoney { get; set; }
     }
 }

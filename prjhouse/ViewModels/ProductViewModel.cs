@@ -30,7 +30,7 @@ namespace prjhouse.ViewModels
         {   get { return _product.HouseName; }
             set {_product.HouseName=value; } 
         }
-        
+      
         public string? HouseAddressArea
         {   get { return _product.HouseAddressArea; }
             set { _product.HouseAddressArea = value; }
@@ -42,7 +42,7 @@ namespace prjhouse.ViewModels
             set { _product.HouseAddressCity = value; } 
         }
 
-        public string? HousePrice 
+        public decimal? HousePrice 
         {  
             get {return _product.HousePrice; }
             set {_product.HousePrice=value; } 

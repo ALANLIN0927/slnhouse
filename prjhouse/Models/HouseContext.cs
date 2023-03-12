@@ -50,9 +50,22 @@ namespace prjhouse.Models
                     .HasMaxLength(50)
                     .HasColumnName("businessmemberphone");
 
+                entity.Property(e => e.Businessmoney)
+                    .HasColumnType("money")
+                    .HasColumnName("businessmoney");
+
                 entity.Property(e => e.Fid)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("fid");
+
+                entity.Property(e => e.Password).HasMaxLength(50);
+
+                entity.Property(e => e.Phone).HasMaxLength(50);
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(10)
+                    .HasDefaultValueSql("(N'B')")
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<NormalMember>(entity =>
@@ -93,9 +106,18 @@ namespace prjhouse.Models
 
                 entity.Property(e => e.MemberPhotoFile).HasMaxLength(50);
 
+                entity.Property(e => e.Membermoney)
+                    .HasColumnType("money")
+                    .HasColumnName("membermoney");
+
                 entity.Property(e => e.Password).HasMaxLength(50);
 
                 entity.Property(e => e.Phone).HasMaxLength(50);
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(10)
+                    .HasDefaultValueSql("(N'M')")
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -147,7 +169,7 @@ namespace prjhouse.Models
 
                 entity.Property(e => e.HouseName).HasMaxLength(50);
 
-                entity.Property(e => e.HousePrice).HasMaxLength(50);
+                entity.Property(e => e.HousePrice).HasColumnType("money");
 
                 entity.Property(e => e.Housephoto).HasMaxLength(50);
             });
