@@ -13,6 +13,7 @@ namespace prjhouse.Models
         public int Bussnisid { get; set; }
         [DisplayName("公司名")]
         public string? BussnisName { get; set; }
+        [DisplayName("訂單編號")]
         public int? Itemfid { get; set; }
         [DisplayName("產品名")]
         public string? ProductName { get; set; }
