@@ -247,8 +247,7 @@ namespace prjhouse.Controllers
                        join o3 in _house.Orderitems on p.Fid equals o3.ProductFid                  
                        where n.FId == shopmember.FId && n.FId==o2.CustomerId && p.Fid== o3.ProductFid &&b.Fid==o.BussinessId
                        select new
-                       {
-                          
+                       {                      
                           b.Fid,                        
                           p.HousePrice
                        };
@@ -263,8 +262,7 @@ namespace prjhouse.Controllers
                         Order single = new Order();
                         single.Ordertotalprice = item.HousePrice.ToString();                      
                         single.Bussnisid = item.Fid;
-                        
-                        
+                                              
                         listorderview.Add(single);
                         _house.Orders.Add(single);
                         
