@@ -1,4 +1,4 @@
-﻿@model IEnumerable<prjhouse.Models.Product>
+﻿@model IEnumerable<prjhouse.Models.Orderitem>
 
 @{
     ViewData["Title"] = "cartview";
@@ -14,60 +14,59 @@
     <thead>
         <tr>
             <th>
-                購物順序
+                房子名稱
+            </th>
+
+            <th>
+                數量
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HouseName)
+                價錢
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HouseAddressArea)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HouseAddressCity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HousePrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Housephoto)
+                小計
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @{
-            decimal?total =0;
-            int count = 0;
-            foreach (var item in Model) {
-                count++;
-                total +=item.HousePrice;
-            <tr>
-            <td>
-                @count
+            decimal? pay = 0;
+            foreach (var item in Model)
+            {
+             <input type="hidden" value="@item.ProductFid">
+                pay += item.小計;
+                <tr>
+                    @* <td>
+            @Html.DisplayFor(modelItem => item.Fid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HouseName)
+            @Html.DisplayFor(modelItem => item.OrdFid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HouseAddressArea)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HouseAddressCity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HousePrice)元
-            </td>
-            <td>
-               <img class="showphoto" style="width:60px;height:60px;" src='~/images/@item.Housephoto' />
-            </td>
-            <td>
-               
-                @Html.ActionLink("Delete", "Delete", new {  id=item.Fid })
-            </td>
-        </tr>
-    }}
-    <div>
-            <p>總價:@total  </p>
-    </div>
+            @Html.DisplayFor(modelItem => item.ProductFid)
+            </td>*@
+                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.product.HouseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Qty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.小計)
+                    </td>
+                    @* <td>
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>*@
+                </tr>
+            }
+        }
+
     </tbody>
 </table>
+<div>總共:@pay 元</div>
+@Html.ActionLink("結帳","checkout")

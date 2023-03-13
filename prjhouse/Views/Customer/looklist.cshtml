@@ -1,0 +1,40 @@
+﻿@model IEnumerable<prjhouse.Models.Order>
+
+@{
+    ViewData["Title"] = "looklist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>looklist</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Ordertotalprice)
+            </th>
+                       
+            <th>
+               店家員工編號
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Ordertotalprice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bussnisid)
+            </td>
+           
+        </tr>
+}
+    </tbody>
+</table>

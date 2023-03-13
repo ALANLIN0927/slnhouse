@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using prjhouse.Models;
 using prjhouse.ViewModels;
 using System.Text.Json;
-
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace prjhouse.Controllers
 {
@@ -132,45 +132,62 @@ namespace prjhouse.Controllers
 
         }
 
-        public IActionResult addshopcar(int? id)              //加入購物車
+        public IActionResult addshopcar(int id)
+        {
+            ViewBag.fId = id;
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult addshopcar(CaddtocartViewModel p)              //加入購物車
         {
             if (!(HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_USER)))
             {
                 return RedirectToAction("productlist");
             }
 
-            Product house= _house.Products.FirstOrDefault(c=>c.Fid==id);
-            if (house==null)
+            Product house = _house.Products.FirstOrDefault(c => c.Fid == p.txtFid);
+            if (house == null)
             {
                 return RedirectToAction("productlist");
             }
-            List<Product> cart = null;
+            List<Orderitem> cart = null;
             string json = "";
-            if(HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST)) 
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
             {
                 json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
-                cart = JsonSerializer.Deserialize<List<Product>>(json);          
+                cart = JsonSerializer.Deserialize<List<Orderitem>>(json);
             }
             else
             {
-                cart = new List<Product>();
+                cart = new List<Orderitem>();
             }
-             cart.Add(house);
-             json=JsonSerializer.Serialize(cart);
-             HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST,json);
-           return RedirectToAction("productlist");
+            Orderitem x = new Orderitem();
+            x.Fid = house.Fid;
+            x.BussinessId = house.Housebusnissfid;
+            x.Qty = p.txtCount;
+            x.ProductPrice = house.HousePrice;
+            x.ProductFid= p.txtFid;
+            x.product = house;
+            
+            cart.Add(x);
+            json = JsonSerializer.Serialize(cart);
+            HttpContext.Session.SetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST, json);
+            return RedirectToAction("productlist");
         }
         public IActionResult cartview()                                          //購物車一覽
         {
+            
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_USER))
+            {
 
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_USER)){
-
-                List<Product> cart = null;
+                List<Orderitem> cart = null;
                 string json = "";
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
                 {
                     json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
-                    cart = JsonSerializer.Deserialize<List<Product>>(json);
+                    cart = JsonSerializer.Deserialize<List<Orderitem>>(json);
                     return View(cart);
                 }
                 else
@@ -181,16 +198,87 @@ namespace prjhouse.Controllers
 
             return RedirectToAction("productlist");
         }
-        //public IActionResult deletecaritem(int id)
-        //{
-        //    Product cartitem=_house.NormalMembers
+
+        public IActionResult checkout()
+        {
+            string jsonmember = HttpContext.Session.GetString(CDictionary.SK_LOGIN_USER);
+            NormalMember shopmember = JsonSerializer.Deserialize<NormalMember>(jsonmember);
+
+            List<Orderitem> cart = null;
+            string json = "";
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASED_PRODUCTS_LIST))
+            {
+                json = HttpContext.Session.GetString(CDictionary.SK_PURCHASED_PRODUCTS_LIST);
+                cart = JsonSerializer.Deserialize<List<Orderitem>>(json);
+
+
+                foreach (var item in cart)
+                {
+                    Orderitem x = new Orderitem();
+                    x.Qty = item.Qty;
+                    x.ProductPrice = item.ProductPrice;
+                    x.OrdFid = item.OrdFid;
+                    x.ProductFid = item.Fid;
+                    x.ProductFid = item.ProductFid;
+                    x.CustomerId = shopmember.FId;
+                    x.BussinessId = item.BussinessId;
+                    _house.Add(x);
+                    _house.SaveChanges();
+                }
+                return RedirectToAction("productlist");
+            }
+
+            return RedirectToAction("productlist");
+
+        }
+
+            public IActionResult looklist()               //訂單一覽
+           {
+               
+
+            string jsonmember = HttpContext.Session.GetString(CDictionary.SK_LOGIN_USER);
+            NormalMember shopmember = JsonSerializer.Deserialize<NormalMember>(jsonmember);
+
+            var list = from b in _house.Businesses
+                       join o in _house.Orderitems on b.Fid equals o.BussinessId                     
+                       from n in _house.NormalMembers
+                       join o2 in _house.Orderitems on n.FId equals o2.CustomerId       
+                       from p in _house.Products
+                       join o3 in _house.Orderitems on p.Fid equals o3.ProductFid                  
+                       where n.FId == shopmember.FId && n.FId==o2.CustomerId && p.Fid== o3.ProductFid &&b.Fid==o.BussinessId
+                       select new
+                       {
+                          
+                          b.Fid,                        
+                          p.HousePrice
+                       };
+
+                        List<Order> listorderview = new List<Order>();
+                        if (list == null)
+                            {
+                            return RedirectToAction("productlist");
+                            }
+                    foreach(var item in list.Distinct())
+                    {
+                        Order single = new Order();
+                        single.Ordertotalprice = item.HousePrice.ToString();                      
+                        single.Bussnisid = item.Fid;
+                        
+                        
+                        listorderview.Add(single);
+                        _house.Orders.Add(single);
+                        
+                    }
+                    _house.SaveChanges();
+                    return View(listorderview);
 
 
 
 
+        }
 
 
-        //}
+
 
     }
 }

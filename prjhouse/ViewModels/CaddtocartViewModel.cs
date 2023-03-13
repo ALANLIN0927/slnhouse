@@ -2,8 +2,9 @@
 {
     public class CaddtocartViewModel
     {
-        public int txtid { get; set; }
-        
+        public int txtCount { get; set; }
+        public int txtFid { get; set; }
+
 
     }
 }

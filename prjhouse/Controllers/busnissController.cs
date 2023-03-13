@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using prjhouse.Models;
 using prjhouse.ViewModels;
 using System.Text.RegularExpressions;
+using System.Text.Json;
 
 namespace prjhouse.Controllers
 {
@@ -49,6 +50,10 @@ namespace prjhouse.Controllers
         [HttpPost]
         public IActionResult create(ProductViewModel vm, IFormFile photo)
         {
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOGIN_USER);
+           Business member =  JsonSerializer.Deserialize<Business>(json);
+
+
             if (vm.HouseName == null || vm.HouseAddressArea == null || vm.HouseAddressCity == null || vm.HousePrice == null)
             {
                 return View();
@@ -68,6 +73,7 @@ namespace prjhouse.Controllers
 
                 Product house = new Product();
                 house = vm.product;
+                house.Housebusnissfid = member.Fid;
                 _house.Products.Add(vm.product);
                 _house.SaveChanges();
                 return RedirectToAction("productlist");
@@ -117,6 +123,8 @@ namespace prjhouse.Controllers
         [HttpPost]
         public IActionResult edit(Product h,ProductViewModel vm)
         {
+          
+
             if (h.HouseName == null || h.HouseAddressCity==null||h.HouseAddressArea==null||h.HousePrice==null) 
             {
                 return View(h);
@@ -192,6 +200,9 @@ namespace prjhouse.Controllers
             }
             return RedirectToAction("productlist");
         }
+
+
+        
 
 
 

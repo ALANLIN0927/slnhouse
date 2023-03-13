@@ -19,6 +19,8 @@ namespace prjhouse.Models
         public virtual DbSet<Business> Businesses { get; set; } = null!;
         public virtual DbSet<NormalMember> NormalMembers { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<Orderdetail> Orderdetails { get; set; } = null!;
+        public virtual DbSet<Orderitem> Orderitems { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -122,33 +124,55 @@ namespace prjhouse.Models
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Fid);
 
                 entity.ToTable("order");
 
-                entity.Property(e => e.Fid)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("fid");
+                entity.Property(e => e.Fid).HasColumnName("fid");
 
-                entity.Property(e => e.Itemid).HasColumnName("itemid");
+                entity.Property(e => e.Bussnisid).HasColumnName("bussnisid");
 
                 entity.Property(e => e.Memberid).HasColumnName("memberid");
-
-                entity.Property(e => e.Orderaddress)
-                    .HasMaxLength(50)
-                    .HasColumnName("orderaddress");
 
                 entity.Property(e => e.Orderdate)
                     .HasColumnType("date")
                     .HasColumnName("orderdate");
 
-                entity.Property(e => e.Orderitemname)
+                entity.Property(e => e.Ordertotalprice)
                     .HasMaxLength(50)
-                    .HasColumnName("orderitemname");
+                    .HasColumnName("ordertotalprice");
+            });
 
-                entity.Property(e => e.Orderprice)
-                    .HasMaxLength(50)
-                    .HasColumnName("orderprice");
+            modelBuilder.Entity<Orderdetail>(entity =>
+            {
+                entity.HasKey(e => e.Fid);
+
+                entity.ToTable("orderdetail");
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
+
+                entity.Property(e => e.ItemFid).HasColumnName("item_fid");
+            });
+
+            modelBuilder.Entity<Orderitem>(entity =>
+            {
+                entity.HasKey(e => e.Fid);
+
+                entity.ToTable("orderitems");
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
+
+                entity.Property(e => e.BussinessId).HasColumnName("bussiness_id");
+
+                entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+
+                entity.Property(e => e.OrdFid).HasColumnName("Ord_fid");
+
+                entity.Property(e => e.ProductFid).HasColumnName("product_fid");
+
+                entity.Property(e => e.ProductPrice)
+                    .HasColumnType("money")
+                    .HasColumnName("product_price");
             });
 
             modelBuilder.Entity<Product>(entity =>

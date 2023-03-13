@@ -24,6 +24,7 @@
         @{
             int count = 0;
             foreach (var item in Model) {
+                <input type="hidden" name="Fid" value="@item.Fid">
                 count++;
                 <div class="housesingle">
                 <div>
