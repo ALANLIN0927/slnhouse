@@ -130,7 +130,13 @@ namespace prjhouse.Models
 
                 entity.Property(e => e.Fid).HasColumnName("fid");
 
+                entity.Property(e => e.BussnisName)
+                    .HasMaxLength(50)
+                    .HasColumnName("bussnisName");
+
                 entity.Property(e => e.Bussnisid).HasColumnName("bussnisid");
+
+                entity.Property(e => e.Itemfid).HasColumnName("itemfid");
 
                 entity.Property(e => e.Memberid).HasColumnName("memberid");
 
@@ -141,6 +147,14 @@ namespace prjhouse.Models
                 entity.Property(e => e.Ordertotalprice)
                     .HasMaxLength(50)
                     .HasColumnName("ordertotalprice");
+
+                entity.Property(e => e.ProductName)
+                    .HasMaxLength(50)
+                    .HasColumnName("productName");
+
+                entity.Property(e => e.Productcount).HasColumnName("productcount");
+
+                entity.Property(e => e.Productprice).HasColumnType("money");
             });
 
             modelBuilder.Entity<Orderdetail>(entity =>

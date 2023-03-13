@@ -5,6 +5,8 @@ using prjhouse.Models;
 using prjhouse.ViewModels;
 using System.Text.Json;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections;
+using System;
 
 namespace prjhouse.Controllers
 {
@@ -222,10 +224,53 @@ namespace prjhouse.Controllers
                     x.ProductFid = item.ProductFid;
                     x.CustomerId = shopmember.FId;
                     x.BussinessId = item.BussinessId;
-                    _house.Add(x);
-                    _house.SaveChanges();
+                    _house.Orderitems.Add(x);
+                    
                 }
-                return RedirectToAction("productlist");
+                _house.SaveChanges();
+                var list = from b in _house.Businesses
+                           join o in _house.Orderitems on b.Fid equals o.BussinessId
+                           from n in _house.NormalMembers
+                           join o2 in _house.Orderitems on n.FId equals o2.CustomerId
+                           from p in _house.Products
+                           join b2 in _house.Businesses on p.Housebusnissfid equals b2.Fid
+                           /*where n.FId == shopmember.FId*/ /*&& n.FId == o2.CustomerId && p.Fid == o3.ProductFid && b.Fid == o.BussinessId*/
+                           select new
+                           {
+                               bsname = b.Businessmembername,
+                               b.Fid,
+                               itemod = o.Fid,
+                               o.Qty,
+                               p.HouseName,
+                               p.HousePrice,
+                               nomemberid = n.FId
+
+                           };
+
+                List<Order> listorderview = new List<Order>();
+                if (list == null)
+                {
+                    return RedirectToAction("productlist");
+                }
+               
+                foreach (var item in list.Distinct())
+                {
+                    Order single = new Order();
+                    single.Productprice = item.HousePrice;
+                    single.ProductName = item.HouseName;
+                    single.Productcount = item.Qty;
+                    single.Memberid = item.nomemberid;
+                    single.BussnisName = item.bsname;
+                    single.Bussnisid = item.Fid;
+                    single.Itemfid = item.itemod;
+
+                    listorderview.Add(single);
+                    _house.Orders.Add(single);
+                }
+                
+                _house.SaveChanges();
+
+             return RedirectToAction("productlist");
             }
 
             return RedirectToAction("productlist");
@@ -234,43 +279,16 @@ namespace prjhouse.Controllers
 
             public IActionResult looklist()               //訂單一覽
            {
-               
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_USER)){
+               string jsonmember = HttpContext.Session.GetString(CDictionary.SK_LOGIN_USER);
+               NormalMember shopmember = JsonSerializer.Deserialize<NormalMember>(jsonmember);
 
-            string jsonmember = HttpContext.Session.GetString(CDictionary.SK_LOGIN_USER);
-            NormalMember shopmember = JsonSerializer.Deserialize<NormalMember>(jsonmember);
+               IEnumerable<Order> list = _house.Orders.Where(o => o.Memberid == shopmember.FId);
+                
+                return View(list);
+            }
 
-            var list = from b in _house.Businesses
-                       join o in _house.Orderitems on b.Fid equals o.BussinessId                     
-                       from n in _house.NormalMembers
-                       join o2 in _house.Orderitems on n.FId equals o2.CustomerId       
-                       from p in _house.Products
-                       join o3 in _house.Orderitems on p.Fid equals o3.ProductFid                  
-                       where n.FId == shopmember.FId && n.FId==o2.CustomerId && p.Fid== o3.ProductFid &&b.Fid==o.BussinessId
-                       select new
-                       {                      
-                          b.Fid,                        
-                          p.HousePrice
-                       };
-
-                        List<Order> listorderview = new List<Order>();
-                        if (list == null)
-                            {
-                            return RedirectToAction("productlist");
-                            }
-                    foreach(var item in list.Distinct())
-                    {
-                        Order single = new Order();
-                        single.Ordertotalprice = item.HousePrice.ToString();                      
-                        single.Bussnisid = item.Fid;
-                                              
-                        listorderview.Add(single);
-                        _house.Orders.Add(single);
-                        
-                    }
-                    _house.SaveChanges();
-                    return View(listorderview);
-
-
+            return RedirectToAction("productlist");
 
 
         }

@@ -10,5 +10,10 @@ namespace prjhouse.Models
         public DateTime? Orderdate { get; set; }
         public int Memberid { get; set; }
         public int Bussnisid { get; set; }
+        public string? BussnisName { get; set; }
+        public int? Itemfid { get; set; }
+        public string? ProductName { get; set; }
+        public decimal? Productprice { get; set; }
+        public int? Productcount { get; set; }
     }
 }

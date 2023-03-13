@@ -13,12 +13,21 @@
 <table class="table">
     <thead>
         <tr>
+            
             <th>
-                @Html.DisplayNameFor(model => model.Ordertotalprice)
+                @Html.DisplayNameFor(model => model.BussnisName)
             </th>
-                       
             <th>
-               店家員工編號
+                @Html.DisplayNameFor(model => model.Itemfid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Productprice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Productcount)
             </th>
             <th></th>
         </tr>
@@ -26,14 +35,26 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            
            
             <td>
-                @Html.DisplayFor(modelItem => item.Ordertotalprice)
+                @Html.DisplayFor(modelItem => item.BussnisName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Bussnisid)
+                @Html.DisplayFor(modelItem => item.Itemfid)
             </td>
-           
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Productprice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Productcount)
+            </td>
+            <td>
+              
+            </td>
         </tr>
 }
     </tbody>
